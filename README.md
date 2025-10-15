@@ -97,7 +97,8 @@ This project consists of **two core n8n workflows** that work together to create
 
 > **Experience the AI Language Tutor in action!**
 
-You can view a comprehensive video walkthrough of the automation setup and see the project in action:
+You can see the project in action:
+https://drive.google.com/file/d/1IC69-Y0B88ayzVZ2lmLrGAUp9WAnaj6H/view?usp=sharing
 
 
 ---
