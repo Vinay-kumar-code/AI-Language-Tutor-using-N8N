@@ -67,6 +67,8 @@ This project consists of **two core n8n workflows** that work together to create
    - Converts AI text response to high-quality speech using **ElevenLabs API**
    - Returns generated audio file directly in webhook response
 
+<img width="1583" height="547" alt="image" src="https://github.com/user-attachments/assets/332d58c8-29cc-4f44-9356-83f779cc6d4c" />
+
 ---
 
 ## 🧩 Tech Stack
@@ -90,33 +92,6 @@ This project consists of **two core n8n workflows** that work together to create
 |:---------|:---------------|:---------|
 | `Workflow1_UserOnboarding.json` | n8n workflow for onboarding new users and storing preferences | **Workflow** |
 | `Workflow2_ConversationalTutor.json` | Main n8n workflow powering the AI tutor chat system | **Workflow** |
-| `User_Preferences_Table.sql` | SQL schema for user preferences table structure | **Database** |
-| `Chat_History_Table.sql` | SQL schema for chat history table structure | **Database** |
-
-### 🏗️ **Architecture Overview**
-
-```mermaid
-graph TD
-    A[👤 User Request] --> B[🌐 Webhook Trigger]
-    B --> C{🔀 Route Type}
-    
-    C -->|onboarding| D[📝 User Onboarding]
-    C -->|chat| E[💬 Conversational Tutor]
-    
-    D --> F[💾 Store Preferences]
-    F --> G[✅ Success Response]
-    
-    E --> H[📚 Fetch Context]
-    H --> I[🤖 AI Processing]
-    I --> J[💾 Save Messages]
-    J --> K[🔊 Generate Audio]
-    K --> L[📤 Return Audio Response]
-    
-    style A fill:#e1f5fe
-    style G fill:#c8e6c9
-    style L fill:#c8e6c9
-```
-
 ---
 
 ## 🎥 Demo
@@ -131,60 +106,6 @@ You can view a comprehensive video walkthrough of the automation setup and see t
 
 ---
 
-## � Getting Started
-
-### Prerequisites
-
-- [ ] **n8n** instance (cloud or self-hosted)
-- [ ] **Supabase** account and project
-- [ ] **ElevenLabs** API key
-- [ ] **OpenRouter** API key
-
-### Quick Setup
-
-1. **Import Workflows**
-   ```bash
-   # Import the workflow files into your n8n instance
-   - Workflow1_UserOnboarding.json
-   - Workflow2_ConversationalTutor.json
-   ```
-
-2. **Database Setup**
-   ```sql
-   -- Run the SQL files in your Supabase project
-   User_Preferences_Table.sql
-   Chat_History_Table.sql
-   ```
-
-3. **Configure API Keys**
-   - Set up your ElevenLabs API credentials
-   - Configure OpenRouter API access
-   - Connect Supabase database credentials
-
-4. **Test Endpoints**
-   - User Onboarding: `POST /user-onboarding`
-   - Chat Message: `POST /chat-message`
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 👤 Author
 
 <div align="center">
@@ -192,7 +113,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Vinay Kumar**
 
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Vinay-kumar-code)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/your-profile)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vinay-kumar-balisetti)
 
 *Built as part of the AI Internship Assignment*
 
@@ -204,6 +125,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### ⭐ If you found this project helpful, please give it a star!
 
-**Made with ❤️ and AI**
+**Made with ❤️**
 
 </div>
