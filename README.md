@@ -15,7 +15,6 @@ This project creates a sophisticated two-part AI Language Tutor using **n8n**, *
 - [🧩 Tech Stack](#-tech-stack)
 - [🧰 Project Structure](#-project-structure)
 - [🎥 Demo](#-demo)
-- [🚀 Getting Started](#-getting-started)
 - [👤 Author](#-author)
 
 ---
