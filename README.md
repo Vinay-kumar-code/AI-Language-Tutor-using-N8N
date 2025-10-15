@@ -100,9 +100,6 @@ This project consists of **two core n8n workflows** that work together to create
 
 You can view a comprehensive video walkthrough of the automation setup and see the project in action:
 
-[![Demo Video](https://img.shields.io/badge/📺_Watch_Demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://your-video-link-here)
-
-*Replace the link above with your actual demo video URL*
 
 ---
 
