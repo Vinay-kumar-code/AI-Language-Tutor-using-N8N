@@ -1,0 +1,393 @@
+{
+  "name": "Conversational Tutor",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/chat-message",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -656,
+        -128
+      ],
+      "id": "94123311-3d4e-4cfc-aa59-793d253e5117",
+      "name": "Webhook",
+      "webhookId": "a4e89bac-090d-4b0b-862a-9a7eab58dcdb",
+      "notes": "{\n  \"user_id\": \"12345\",\n  \"message\": \"How do I say 'Where is the train station?' in Spanish?\"\n}\n"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a {{ $json.ai_personality }} AI Language Tutor. The user's native language: {{ $json.native_language }} Target Language: {{ $json.target_language }} and Topic of Interest:  {{ $json.topic }}\n\nHere is the chat history:\n{{ $json.data }}\n\nUser's new message:{{ $('Webhook').item.json.body.message }} \n\nRespond Naturally as a language tutor, explaining grammar and vocabulary when relevant.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        -256
+      ],
+      "id": "8a76d600-a6c0-4037-89c7-f0724de337e6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "role, message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        176
+      ],
+      "id": "0ab30f64-cfcc-4c47-a93a-84cf5a67a687",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "21m00Tcm4TlvDq8ikWAM",
+          "mode": "list",
+          "cachedResultName": "Rachel"
+        },
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalOptions": {
+          "outputFormat": "mp3_44100_128"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        -128
+      ],
+      "id": "f2ed9c9f-e9d1-4a2a-bd59-a682820dfdb4",
+      "name": "Convert text to speech",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "fBPUUNeJ0KRnKpXC",
+          "name": "ElevenLabs account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "responseDataSource": "set",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1520,
+        -128
+      ],
+      "id": "b97a24b4-18c0-4ee8-8a6b-2ed27a0083cd",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        -112
+      ],
+      "id": "3f586899-baed-4884-a1e9-2e649db30c37",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "tableId": "chat_history",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $json.body.user_id }}"
+            },
+            {
+              "fieldId": "role",
+              "fieldValue": "user"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $json.body.message }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -128
+      ],
+      "id": "7b807882-e6a1-4663-9081-493700ee6e4c",
+      "name": "chat_history_user",
+      "credentials": {
+        "supabaseApi": {
+          "id": "IWwAayNolayvs0fb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "chat_history",
+        "limit": 10,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "user_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.user_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        176
+      ],
+      "id": "faea6960-8bd6-4d4c-b629-f88cf02991ee",
+      "name": "Chat_history",
+      "credentials": {
+        "supabaseApi": {
+          "id": "IWwAayNolayvs0fb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "user_preferences",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "user_id",
+              "keyValue": "={{ $('Webhook').item.json.body.user_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        -128
+      ],
+      "id": "cfd7551d-902f-4b9c-8396-9ae6e425153f",
+      "name": "User_Preference",
+      "credentials": {
+        "supabaseApi": {
+          "id": "IWwAayNolayvs0fb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-maverick:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        512,
+        96
+      ],
+      "id": "76f9806d-0ba0-47c1-89ee-45d13471fae9",
+      "name": "Llama 4 Maverick Free",
+      "credentials": {
+        "openRouterApi": {
+          "id": "Xy8tmrCLG0ZpDL1O",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "chat_history",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $('User_Preference').item.json.user_id }}"
+            },
+            {
+              "fieldId": "role",
+              "fieldValue": "ai"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $json.output }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        -128
+      ],
+      "id": "ea89aac1-c37d-40c1-90e5-1b79c3029e6f",
+      "name": "Chat_history_ai",
+      "credentials": {
+        "supabaseApi": {
+          "id": "IWwAayNolayvs0fb",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "chat_history_user",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Chat_history",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Chat_history_ai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Convert text to speech": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "chat_history_user": {
+      "main": [
+        [
+          {
+            "node": "User_Preference",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat_history": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User_Preference": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Llama 4 Maverick Free": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat_history_ai": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "26030d08-7a17-40ce-b868-09c36674aea0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "784b35d6c527fa8a569de3e1ae08d1437f562638a0dee8dbc6272d4251984db5"
+  },
+  "id": "V7i8r3THcXm35uAE",
+  "tags": []
+}

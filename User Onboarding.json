@@ -1,0 +1,117 @@
+{
+  "name": "User Onboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/user-onboarding",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -496,
+        -144
+      ],
+      "id": "2ffa3cdc-15f7-40b7-9020-bd58cf4de5a1",
+      "name": "Webhook",
+      "webhookId": "0703fc04-9bf5-44ac-99bb-6cbc27568041",
+      "notes": "{\n  \"user_id\": \"12345\",\n  \"native_language\": \"English\",\n  \"target_language\": \"Spanish\",\n  \"topic\": \"Travel\",\n  \"ai_personality\": \"friendly\"\n}"
+    },
+    {
+      "parameters": {
+        "tableId": "user_preferences",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $json.body.user_id }}"
+            },
+            {
+              "fieldId": "native_language",
+              "fieldValue": "={{ $json.body.native_language }}"
+            },
+            {
+              "fieldId": "target_language",
+              "fieldValue": "={{ $json.body.target_language }}"
+            },
+            {
+              "fieldId": "topic",
+              "fieldValue": "={{ $json.body.topic }}"
+            },
+            {
+              "fieldId": "ai_personality",
+              "fieldValue": "={{ $json.body.ai_personality }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -144
+      ],
+      "id": "469d0c2d-5222-4853-b8e0-ba9b836336bc",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "IWwAayNolayvs0fb",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "{ \"status\": \"success\", \"message\": \"User preferences saved successfully.\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        48,
+        -144
+      ],
+      "id": "cb19af6d-c20b-4516-a3c7-1e186b1b8ac4",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a6939463-ab12-4f44-861f-b415863162d7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "784b35d6c527fa8a569de3e1ae08d1437f562638a0dee8dbc6272d4251984db5"
+  },
+  "id": "DavKGiGO9MP37BcC",
+  "tags": []
+}
